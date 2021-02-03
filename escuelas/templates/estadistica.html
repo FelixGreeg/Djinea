@@ -1,0 +1,135 @@
+{% extends "cuerpo.html" %}
+{% block title %} SIGINEA {% endblock %}
+
+{% block content %}
+<html>
+{% load static %}
+
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Chart.css' %}">
+    <script type="text/javascript" src="{% static 'js/Chart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/utils.js' %}"></script>
+
+
+
+
+
+
+</head>
+
+<body>
+    {% include "superior/barra.html" %}
+    <!--<h1>Total:{{totalconteo}}% </h1>-->
+    <div class="container">
+        <div class="col - xs">
+            <div class="col-med-12">
+                <div >
+                    <h2 class=" text-center">INEA.Porcentaje de Rezago Educativo en el Estado de México,2017</h2>
+                    <canvas id="myChart" width="100%" height="50%"></canvas>
+                </div>                    
+            </div>
+            <div class="row tx">
+               
+                <div class="col-md-6">
+                    <h1 class=" text-center"></h1>
+                    <div class="card card-block">
+                        <h3 class="card-title text-center"> </h3>
+                        <img class="imag" src="static/img/AnalfabetaEdomex.jpg" width="100%" height="100%">
+                        
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h1></h1>
+                    <div class="card card-block">
+                        <h3 class="card-title text-center"> </h3>
+                        <img class="imag " src="static/img/RezagoEdomex.jpg" width="100%" height="100%">
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h1 class=" text-center"></h1>
+                    <div class="card card-block">
+                        <h3 class="card-title text-center"> </h3>
+                        <img class="imag" src="static/img/SinPrimariaEdomex.jpg" width="100%" height="100%">
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h1></h1>
+                    <div class="card card-block">
+                        <h3 class="card-title text-center"> </h3>
+                        <img class="imag " src="static/img/SinSecundariaEdomex.jpg" width="100%" height="100%">
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="col - xs">
+            <div class="row">
+                
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var ctx = document.getElementById('myChart');
+    var chartOptions = {responsive: true,
+        
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
+        hover: {
+            mode: 'nearest',
+            intersect: true
+        }
+    };
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ muni| safe}},
+    datasets: [{
+        label: '(%) Analfabetas ',
+        fill: true,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        data: {{ af| safe}}
+            },{
+                label: '(% ) Sin Primaría',
+                fill: true,
+            backgroundColor:  'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            data: {{ sp| safe}}
+            },{
+                label: '(% ) Sin Secundaria ',
+                fill: true,
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            data: {{ ss| safe}}
+            },{
+                label: '(% ) Rezago',
+                fill: true,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            data: {{ rz| safe}}
+            }]
+        },
+    options: chartOptions
+    });
+    window.onload = function() {
+        var ctx = document.getElementById('canvas').getContext('2d');
+        window.myLine = new Chart(ctx, config);
+    };
+</script>
+
+</html>
+
+{% endblock %}

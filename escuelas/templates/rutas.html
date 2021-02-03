@@ -1,0 +1,184 @@
+{% extends "cuerpo.html" %}
+{% block title %} SIGINEA {% endblock %}
+
+{% block content %}
+<html>
+{% load static %}
+{% load leaflet_tags %}
+
+<head>
+    {% leaflet_js %}
+    {% leaflet_css %}
+    <style type="text/css">
+        #gis {
+            width: 100%;
+            height: 530px;
+        }
+    </style>
+
+    <style>
+        .legendClickArea {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 27px;
+            width: 100%;
+            z-index: 1000;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'leaflet-locatecontrol/dist/L.Control.Locate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%  static 'routing/leaflet-routing-machine.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'leaflet-control-geocoder/dist/Control.Geocoder.css' %}">
+    <script type="text/javascript" src="{% static 'dist/leaflet.ajax.js' %}"></script>
+    <script type="text/javascript"src="{% static 'leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js' %}"></script>
+    <script type="text/javascript" src="{% static 'routing/leaflet-routing-machine.js' %}"></script>
+    <script type="text/javascript" src="{% static 'leaflet-locatecontrol/src/L.Control.Locate.js' %}"></script>
+    <script type="text/javascript" src="{% static 'leaflet-control-geocoder/dist/Control.Geocoder.js' %}"></script>
+
+    
+    
+    
+</head>
+
+<body>
+    {% include "superior/barra.html" %}
+    <div class="container">
+        <div class="row">
+            <div class="col - xs">
+                <script type="text/javascript">
+                    function salida_capas(map, options) {
+                        var openmaps = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}{r}.png', {
+                            attribution: '© OpenStreetMap contributors'
+                        }).addTo(map);
+            
+                        
+            
+                        var geojsonFeatureIcon = [{
+                            "type": "Feature",
+                            "properties": {
+                                "simbologia": "L.icon"
+                            },
+                            "geometry": {
+                                "type": "Point"
+                            }
+                        }
+                        ];
+            
+                        var greenIcon = L.icon({
+                            iconUrl: "static/img/esc.png",
+                            iconSize: [30, 40],
+                            iconAnchor: [15, 40],
+                            shadowSize: [35, 50],
+                            shadowAnchor: [0, 55],
+                            //popupAnchor: [0, -40]
+                        });
+            
+            
+                        function estiloIcon(feature, latlng) {
+                            return L.marker(latlng, {
+                                icon: greenIcon
+                            })
+                        };
+            
+                        var puntos = new L.GeoJSON.AJAX("{% url 'unidades' %}", {
+                            
+                            onEachFeature: function (feature, layer) {
+                                layer.bindPopup('<h3><img src="static/img/icono.png "> Unidad Operativa</h3> <hr>'+ feature.properties.Tipo_Unidad_Operativa + '<br/>' + feature.properties.Nombre_Unidad_Operativa + '<br/>' + feature.properties.Domicilio.toString());
+                            },
+                            pointToLayer: estiloIcon
+                        });
+            
+                        puntos.addTo(map);
+            
+                        var baseLayers = {
+                            "OpenStreetMap": openmaps
+                        }
+            
+                        var groupedOverlays = {
+                            "Capas": {
+                                "Unidades": puntos
+                            }
+                        };
+            
+                        L.control.groupedLayers(baseLayers, groupedOverlays,{
+                            collapsed:true,
+                            position:'topright'
+                        }).addTo(map);
+            
+                        var Icono = L.icon ({
+                            iconUrl: "static/img/ruta.png",
+                            iconSize: [30, 40],
+                            iconAnchor: [15, 40],
+                            shadowSize: [35, 50],
+                            shadowAnchor: [0, 55],
+                            popupAnchor: [0, -40]
+                        });
+                        
+                        
+                        var ruta = L.Routing.control({
+                            waypoints: [
+                               inicio= L.latLng(19.286548, -99.676456),
+                               fin= L.latLng(19.333760, -99.189082)
+                            ],
+                            language: 'es',
+                            routeWhileDragging: true,
+                            show: true,
+                            geocoder: L.Control.Geocoder.nominatim(),
+                            createMarker: function (i, inicio, n) {
+                                return L.marker(inicio.latLng, {
+                                    draggable: true,
+                                    bounceOnAdd: false,
+                                    opacity: 0.9,
+                                    icon: Icono,
+                                    bounceOnAddOptions: {
+                                        duration: 2000,
+                                        height: 800,
+                                        function(){
+                                            (bindPopup(myPopup).openOn(map))
+                                        }
+                                    }
+                                }).bindPopup('Selecciona la ubicación' + "   " +i);
+                            }
+            
+                        }).addTo(map)
+                        
+                        
+                        var itineraryShown = false;            
+                        var controlContainer = ruta.getContainer();
+                        var legendClickArea = document.createElement("DIV");            
+                        legendClickArea.classList.add('legendClickArea');
+                        controlContainer.appendChild(legendClickArea);            
+                        legendClickArea.onclick = function () {
+                            if (itineraryShown)
+                                ruta.hide();
+                            else {
+                                ruta.show();
+                            }
+                            itineraryShown = !itineraryShown;
+                        };
+            
+                        
+            
+            
+                      var ubica= L.control.locate().addTo(map);
+            
+                    }
+                </script>
+                {% leaflet_map "gis" callback="window.salida_capas" %}
+                
+                
+            </div>
+        </div>
+    </div>
+    
+    
+</body>
+
+</html>
+
+{% endblock %}

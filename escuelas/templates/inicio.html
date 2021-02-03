@@ -1,0 +1,176 @@
+{% extends "cuerpo.html" %}
+{% block title %} SIGINEA {% endblock %}
+
+{% block content %}
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="address=no" name="format-detection">
+    <meta content="origin" name="referrer">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="static/css/bootstrap.css">
+    <link rel="stylesheet" href="static/css/all.css">
+    <link rel="stylesheet" href="static/css/brands.css">
+    <link rel="stylesheet" href="static/css/solid.css">
+    <!-- font awesome iconos -->
+    <link rel='stylesheet' href="static/css/fontawesome.css">
+
+    <title></title>
+
+    <style>
+        html {
+            font-size: 18px;
+            font-family: "Homer Simpson UI";
+        }
+
+        p {
+            font-size: 20px;
+            color: salmon;
+            font-family: "Homer Simpson UI";
+        }
+
+        /*  [class^="col"]{
+             background-color: #eceff1;
+             border: 1px solid rgba(86,61,124,.2);
+             min-height: 50px;
+         }*/
+        .row {
+            margin-top: 10px;
+        }
+
+        .img-ts {
+            width: auto;
+            height: auto;
+        }
+
+        .img-txt {
+            width: 400px;
+            height: 300px;
+            font-family: "Homer Simpson UI";
+        }
+
+        .tx {
+            font-family: "Homer Simpson UI";
+            color: darkorange;
+        }
+
+        .btn-estilo {
+            background-color: rgb(110, 216, 248);
+            color: cornsilk;
+            font-family: "Homer Simpson UI";
+        }
+
+        h1 {
+            font-size: 50px;
+            font-family: "Homer Simpson UI";
+            color: cornflowerblue;
+        }
+
+        .sp {
+            font-size: 15px;
+            font-family: "Homer Simpson UI";
+            list-style: none;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .bg-nav {
+            background-color: #003300;
+        }
+
+        .imag {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+
+
+
+
+
+</head>
+
+
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col - xs">
+                <nav class="navbar navbar-dark bg-nav">
+                    <h1 style="background-color: #011f01; color: rgb(255, 255, 255); text-align: justify;"
+                        class="text-center -xs">
+                        &nbsp; Instituto Nacional para la Educación de los Adultos
+                        <a class="navbar-brand"><img src="static/img/inealog.png" height="10%" width="20%" alt="Logo">
+                            &nbsp;&nbsp; <span class="sp">Sistema de información geográfica </span></a>
+                    </h1>
+                </nav>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="col - xs">
+            <div class="row tx">
+                <div class="col-md-4">
+                    <h1 class=" text-center">Usuarios</h1>
+                    <div class="card card-block">
+                        <h3 class="card-title text-center"> Usuarios</h3>
+                        <img class="imag" src="static/img/u2.png" width="100%" height="200">
+                        <p class="card-text">Busca la unidad operativa que mas te quede cerca de tu casa o trabajo</p>
+                        <a href="http://127.0.0.1:8000/Mapaweb" class="btn btn-outline-primary " role="button"><i
+                                class="far fa-user-circle"></i> </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h1>Administradores</h1>
+                    <div class="card card-block">
+                        <h3 class="card-title text-center"> Geolocalización</h3>
+                        <img class="imag " src="static/img/a5.png" width="80%" height="170">
+                        <p class="card-text">Ubica y administra geográficamente las unidades operativas que se
+                            encuentran en
+                            el Estado de México</p>
+                        <a href="http://127.0.0.1:8000/admin/login/?next=/admin/" target="_blank" class="btn btn-outline-success "
+                            role="button"><i class="fas fa-map-marked-alt"></i> </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <p></p><br><br>
+                    <div class="card card-block">
+                        <h3 class="card-title text-center">Estadística</h3>
+                        <img class="imag" src="static/img/a4.png" width="100%" height="196">
+                        <p class="card-text">Identifica las zonas de mayor rezago educativo en el Estado de México</p>
+                        <a href='http://localhost:8888/login?next=%2Ftree' target="_blank"  class="btn btn-outline-warning " role="button"><i
+                                class="far fa-chart-bar"></i> </a>
+                        <!-- "https://hub.gke.mybinder.org/user/jupyterlab-jupyterlab-demo-yeo0o5ap/lab"-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="static/js/jquery.slim.min.js"></script>
+    <script src="static/js/brands.js"></script>
+    <script src="static/js/solid.js"></script>
+    <script src="static/js/bootstrap.js"></script>
+    <script src="static/js/all.js"></script>
+    <script src="static/js/fontawesome.js"></script>
+
+</body>
+
+</html>
+
+{% endblock %}

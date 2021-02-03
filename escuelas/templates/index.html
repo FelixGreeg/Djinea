@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    {% load static %}
+    {% load leaflet_tags %}
+    <head>
+        {% leaflet_js %}
+        {% leaflet_css %}
+        <title>mapa leaflet</title>
+        <style type="text/css">
+            #gis {width: 100%;height: 500px;}
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'leaflet-locatecontrol/L.Control.Locate.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'routing/leaflet-routing-machine.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css' %}">
+        <script type="text/javascript" src="{% static 'dist/leaflet.ajax.js' %}"></script>
+        <script type="text/javascript" src="{% static 'leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js' %}"></script>
+        <script type="text/javascript" src="{% static 'routing/leaflet-routing-machine.js' %}"></script>
+        <script type="text/javascript" src="{% static 'leaflet-locatecontrol/L.Control.Locate.js' %}"></script>
+    </head>
+<body>
+<h1>
+    Instituto Nacional para la Educación de los Adultos
+</h1>
+<br>
+<script  type="text/javascript">
+    function salida_capas(map,options){
+        var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{y}/{x}.png', {
+            maxZoom: 20,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMpa</a>'
+        });
+        var OpenTopoMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{y}/{x}.png',{
+            maxZoom: 20,
+            attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMpa</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+        });
+
+        var edomexshp = new L.GeoJSON.AJAX("{% url 'edomex' %}",{
+            style: function colors(feature){
+                switch(feature.properties.nomgeo){
+                    case 'Aculco':
+                    return{
+                        color:'orange',
+                        fillOpacity:0.3
+                    };
+                    break;
+                    case 'Zumpango':
+                    return{
+                        color:'green',
+                        fillOpacity:0.3
+                    };
+                    break;
+                    case 'Metepec':
+                    return{
+                        color:'yellow',
+                        fillOpacity:0.3
+                    };
+                    break;
+                
+                };
+            },
+            onEachFeature: function(feature,layer){
+                layer.bindPopup(feature.properties.nomgeo.toString());
+            }
+
+        });
+
+        var puntos = new L.GeoJSON.AJAX("{% url 'unidades' %}",{
+            onEachFeature: function(feature,layer){
+                layer.bindPopup(feature.properties.Dirección.toString());
+            }
+        });
+        
+        edomexshp.addTo(map);
+        puntos.addTo(map);
+
+        var baseLayers = {
+            "OSM":osm,
+            "OpenTopoMapa":OpenTopoMap
+        }
+
+        var groupedOverlays = {
+            "Capas": {
+                "Municipios": edomexshp,
+                "Unidades": puntos
+            }
+        };
+
+        L.control.groupedLayers(baseLayers, groupedOverlays,{
+            collapsed:true,
+            position:'topleft'
+        }).addTo(map);    
+        
+        L.Routing.control({
+            waypoints: [
+                L.latLng(19.286635, -99.677111),
+                L.latLng(19.386635, -99.687111)
+            ],
+            language: 'es',
+            routeWhileDragging: true
+        }).addTo(map);
+
+        L.control.locate().addTo(map);
+        
+    }
+</script>
+{% leaflet_map "gis" callback="window.salida_capas" %}
+</body>
+</html>
