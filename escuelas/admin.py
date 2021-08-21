@@ -9,15 +9,17 @@ from django.contrib import admin
 
 admin.site.site_title = 'SIGINEA'
 admin.site.site_header = ' Instituto Nacional para la Educación de los Adultos'
-
+admin.site.index_title = "Bienvenidos al portal de administración"
 
 
 class mapAdmin(LeafletGeoAdmin):#proyección esférica de Mercator 
    # inlines=[coorInline,munInline,locInline]
     list_display=('Clave_Unidad_Operativa','Nombre_Unidad_Operativa','Tipo_Unidad_Operativa',"Municipio")
-    search_fields=['Clave_Unidad_Operativa']
+    search_fields=('Clave_Unidad_Operativa','Nombre_Unidad_Operativa')
     ordering=('Clave_Unidad_Operativa','Nombre_Unidad_Operativa','Tipo_Unidad_Operativa',"Municipio")
     list_filter=['Coordinación']
+    filter_horizontal=()
+    fieldsets=()
     #pass
     # Configuración para OSMGeoAdmin #
     #default_zoom=8
